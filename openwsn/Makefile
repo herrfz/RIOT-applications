@@ -30,5 +30,5 @@ USEPKG += openwsn
 
 include $(RIOTBASE)/Makefile.include
 
-INCLUDES += -I$(RIOTBASE)/pkg/openwsn/openwsn/projects/common/03oos_openwsn \
-	-I$(RIOTBASE)/pkg/openwsn/openwsn/bsp/boards/riot-adaption
+INCLUDES += -I$(RIOTBASE)/../openwsn/projects/common/03oos_openwsn \
+	-I$(RIOTBASE)/../openwsn/bsp/boards/riot-adaption
