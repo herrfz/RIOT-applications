@@ -32,13 +32,9 @@ int main(void)
 
     puts("Welcome to RIOT!");
 
-    thread_create(stack_buffer, 
-                  sizeof(stack_buffer),
-                  PRIORITY_MAIN - 2,
-                  CREATE_STACKTEST,
-                  mote_main,
-                  NULL,
-                  "mote_main");
+    thread_create(stack_buffer,  sizeof(stack_buffer),
+                  PRIORITY_MAIN - 2, CREATE_STACKTEST,
+                  mote_main, NULL, "mote_main");
 
     shell_init(&shell, NULL, UART0_BUFSIZE, shell_readc, shell_putchar);
     shell_run(&shell);
