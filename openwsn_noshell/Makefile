@@ -18,17 +18,13 @@ CFLAGS += -DDEVELHELP
 # Change this to 0 show compiler invocation lines by default:
 export QUIET ?= 1
 
-USEMODULE += ps
-USEMODULE += shell
-USEMODULE += shell_commands
-USEMODULE += posix
-USEMODULE += uart0
-USEMODULE += at86rf231
+# USEMODULE += at86rf231
+USEMODULE += dummyradio
 
 USEPKG += openwsn
 
 include $(RIOTBASE)/Makefile.include
 
 INCLUDES += -I$(RIOTBASE)/../openwsn/projects/common/03oos_openwsn \
-	-I$(RIOTBASE)/../openwsn/projects/common/01bsp_radiotimer \
-	-I$(RIOTBASE)/../openwsn/bsp/boards/riot-adaption
+	-I$(RIOTBASE)/../openwsn/bsp/boards/dummyriot
+#	-I$(RIOTBASE)/../openwsn/bsp/boards/riot-adaption

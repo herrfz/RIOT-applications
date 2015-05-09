@@ -1,43 +1,47 @@
-#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
 
-#include "shell.h"
-#include "shell_commands.h"
-#include "posix_io.h"
-#include "01bsp_radiotimer.h"
-#include "board_uart0.h"
-#include "riot.h"
-
-#include "thread.h"
-#include "board.h"
+#include "periph/gpio.h"
 #include "vtimer.h"
 
-static char stack_buffer[KERNEL_CONF_STACKSIZE_MAIN];
+#include "03oos_openwsn.h"
 
-static int shell_readc(void)
-{
-    char c = 0;
-    (void) posix_read(uart0_handler_pid, &c, 1);
-    return c;
-}
-
-static void shell_putchar(int c)
-{
-    (void) putchar(c);
-}
 
 int main(void) 
 {
-    shell_t shell;
-    (void) posix_open(uart0_handler_pid, 0);
+    int unpressed, state = 0;
+    int argc = 2;
+    char **argv;
 
-    puts("Welcome to RIOT!");
+    argv = malloc(argc * sizeof(char*));
+    for (int i = 0; i < argc; i++) {
+        argv[i] = malloc(sizeof(char));
+    }
 
-    thread_create(stack_buffer,  sizeof(stack_buffer),
-                  PRIORITY_MAIN - 2, CREATE_STACKTEST,
-                  mote_main, NULL, "mote_main");
+    timex_t begin, end;
+    timex_t period = timex_set(0, 0);
+    gpio_init_in(GPIO_0, GPIO_NOPULL);
 
-    shell_init(&shell, NULL, UART0_BUFSIZE, shell_readc, shell_putchar);
-    shell_run(&shell);
+    while(1) { // measure how long the buttton is pressed
+        unpressed = gpio_read(GPIO_0);
+        if (!unpressed && state == 0) {
+            state = 1;
+            vtimer_now(&begin);
+        } else if (unpressed && state == 1) {
+            state = 0;
+            vtimer_now(&end);
+            period = timex_sub(end, begin);        
+            break;
+        }
+    }
+
+    if (period.seconds < 1) {
+        strcpy(argv[1], "n"); // short press: start as node
+    } else {
+        strcpy(argv[1], "r"); // long press: start as root
+    }
+
+    openwsn_start_thread(argc, argv); // start openwsn
 
     return 0;
 }
