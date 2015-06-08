@@ -18,13 +18,23 @@ CFLAGS += -DDEVELHELP
 # Change this to 0 show compiler invocation lines by default:
 export QUIET ?= 1
 
-# USEMODULE += at86rf231
-USEMODULE += dummyradio
+# Select radiomode between dummyriot and riot-adaption, default to dummyriot:
+export RADIO ?= dummyriot
+
+
+ifeq ($(RADIO),dummyriot)
+	USEMODULE += dummyradio
+endif
+
+ifeq ($(RADIO),riot-adaption)
+	USEMODULE += at86rf231
+endif
 
 USEPKG += openwsn
 
 include $(RIOTBASE)/Makefile.include
 
 INCLUDES += -I$(RIOTBASE)/../openwsn/projects/common/03oos_openwsn \
-	-I$(RIOTBASE)/../openwsn/bsp/boards/dummyriot
-#	-I$(RIOTBASE)/../openwsn/bsp/boards/riot-adaption
+		-I$(RIOTBASE)/../openwsn/bsp/boards/$(RADIO)
+# -I$(RIOTBASE)/../openwsn/bsp/boards/riot-adaption
+# -I$(RIOTBASE)/../openwsn/bsp/boards/dummyriot

@@ -30,7 +30,7 @@ int main(void)
         } else if (unpressed && state == 1) {
             state = 0;
             vtimer_now(&end);
-            period = timex_sub(end, begin);        
+            period = timex_sub(end, begin);
             break;
         }
     }
