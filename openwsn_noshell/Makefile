@@ -30,11 +30,11 @@ ifeq ($(RADIO),riot-adaption)
 	USEMODULE += at86rf231
 endif
 
+USEMODULE += vtimer
+
 USEPKG += openwsn
 
 include $(RIOTBASE)/Makefile.include
 
 INCLUDES += -I$(RIOTBASE)/../openwsn/projects/common/03oos_openwsn \
 		-I$(RIOTBASE)/../openwsn/bsp/boards/$(RADIO)
-# -I$(RIOTBASE)/../openwsn/bsp/boards/riot-adaption
-# -I$(RIOTBASE)/../openwsn/bsp/boards/dummyriot
