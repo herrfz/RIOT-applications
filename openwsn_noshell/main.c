@@ -17,7 +17,11 @@ int main(void)
         argv[i] = malloc(sizeof(char));
     }
 
-    strcpy(argv[1], "n");
+#ifndef ROLE
+#error Define OWSN_ROLE in Makefile!
+#else
+    strcpy(argv[1], ROLE);
+#endif
 
     openwsn_start_thread(argc, argv); // start openwsn
 

@@ -18,9 +18,12 @@ CFLAGS += -DDEVELHELP
 # Change this to 0 show compiler invocation lines by default:
 export QUIET ?= 1
 
+# Select to start openwsn as r(oot) or n(ode) (default: n)
+OWSN_ROLE ?= n
+CFLAGS += -DROLE=\"$(OWSN_ROLE)\"
+
 # Select radiomode between dummyriot and riot-adaption, default to dummyriot:
 export RADIO ?= dummyriot
-
 
 ifeq ($(RADIO),dummyriot)
 	USEMODULE += dummyradio
